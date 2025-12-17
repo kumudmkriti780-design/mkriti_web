@@ -15,14 +15,32 @@
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap');
 
     :root{
-      --gold:#c9a961;
-      --navy:#1a2332;
-      --navy-light:#2d3e50;
-      --cream:#faf8f5;
-      --white:#ffffff;
-      --shadow-sm:0 6px 20px rgba(0,0,0,.08);
-      --shadow-md:0 12px 40px rgba(0,0,0,.12);
-      --transition:all .35s ease;
+      --primary:#00d9ff;
+      --primary-dark:#00a8cc;
+      --accent:#ff6b9d;
+      --bg-dark:#0a0e17;
+      --bg-card:#151b2b;
+      --bg-lighter:#1a2332;
+      --text-primary:#e8eaed;
+      --text-secondary:#a0a6b0;
+      --border:#2d3748;
+      --shadow-glow:0 0 40px rgba(0,217,255,.15);
+      --shadow-card:0 10px 50px rgba(0,0,0,.5);
+      --transition:all .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    [data-theme="light"]{
+      --primary:#0891b2;
+      --primary-dark:#0e7490;
+      --accent:#e11d48;
+      --bg-dark:#ffffff;
+      --bg-card:#f8fafc;
+      --bg-lighter:#f1f5f9;
+      --text-primary:#1e293b;
+      --text-secondary:#64748b;
+      --border:#e2e8f0;
+      --shadow-glow:0 0 40px rgba(8,145,178,.1);
+      --shadow-card:0 10px 50px rgba(0,0,0,.08);
     }
 
     *{box-sizing:border-box}
@@ -30,9 +48,10 @@
     body{
       margin:0;
       font-family:'Montserrat',sans-serif;
-      background:var(--cream);
-      color:#2b2b2b;
-      line-height:1.7;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      line-height:1.8;
+      transition:background .3s ease, color .3s ease;
     }
 
     .container{
@@ -44,16 +63,19 @@
     header{
       position:fixed;
       top:0;left:0;right:0;
-      background:rgba(255,255,255,.96);
+      background:var(--bg-dark);
+      backdrop-filter:blur(10px);
       z-index:1000;
-      border-bottom:1px solid rgba(0,0,0,.06);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 4px 20px rgba(0,0,0,.1);
+      transition:var(--transition);
     }
 
     .header-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:18px 0;
+      padding:20px 0;
     }
 
     .brand{
@@ -66,17 +88,38 @@
       width:60px;
       height:60px;
       border-radius:50%;
-      border:2px solid var(--gold);
+      border:2px solid var(--primary);
       object-fit:cover;
+      box-shadow:0 0 20px rgba(8,145,178,.3);
+    }
+
+    .brand strong{
+      color:var(--primary);
+      font-size:18px;
+      letter-spacing:1px;
+    }
+
+    .brand small{
+      color:var(--text-secondary);
+      font-size:12px;
+    }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
 
     nav a{
-      margin-left:35px;
+      margin-left:25px;
       text-decoration:none;
       text-transform:uppercase;
-      font-size:14px;
-      color:var(--navy);
+      font-size:13px;
+      color:var(--text-primary);
       position:relative;
+      font-weight:500;
+      letter-spacing:1px;
+      transition:var(--transition);
     }
 
     nav a::after{
@@ -86,11 +129,32 @@
       bottom:-6px;
       width:0;
       height:2px;
-      background:var(--gold);
+      background:linear-gradient(90deg, var(--primary), var(--accent));
       transition:.3s;
+      box-shadow:0 0 10px var(--primary);
     }
 
+    nav a:hover{color:var(--primary)}
     nav a:hover::after{width:100%}
+
+    .theme-toggle{
+      margin-left:25px;
+      background:var(--bg-lighter);
+      border:1px solid var(--border);
+      border-radius:50px;
+      padding:8px 12px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      transition:var(--transition);
+      font-size:20px;
+    }
+
+    .theme-toggle:hover{
+      border-color:var(--primary);
+      box-shadow:0 0 15px rgba(8,145,178,.2);
+    }
 
     .hero{
       min-height:100vh;
@@ -98,140 +162,419 @@
       align-items:center;
       padding-top:120px;
       background:
-        linear-gradient(135deg, rgba(26,35,50,.95), rgba(45,62,80,.92)),
+        linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-lighter) 100%),
+        url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&fit=crop')
+        center/cover no-repeat fixed;
+      background-blend-mode:overlay;
+      position:relative;
+      overflow:hidden;
+    }
+
+    [data-theme="light"] .hero{
+      background:
+        linear-gradient(135deg, rgba(248,250,252,.97), rgba(241,245,249,.95)),
         url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&fit=crop')
         center/cover no-repeat fixed;
     }
 
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;bottom:0;
+      background:radial-gradient(circle at 20% 50%, rgba(8,145,178,.15), transparent 50%),
+                 radial-gradient(circle at 80% 80%, rgba(225,29,72,.1), transparent 50%);
+      pointer-events:none;
+    }
+
+    .hero .container{position:relative;z-index:1}
+
     .hero h1{
       font-family:'Cormorant Garamond',serif;
-      font-size:68px;
-      color:white;
+      font-size:72px;
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
       max-width:900px;
+      line-height:1.2;
+      margin-bottom:20px;
     }
 
     .hero p{
-      color:rgba(255,255,255,.85);
+      color:var(--text-secondary);
       max-width:650px;
       font-size:18px;
+      line-height:1.8;
     }
 
     .btn{
-      padding:14px 36px;
-      background:var(--gold);
-      color:var(--navy);
+      padding:16px 40px;
+      background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color:#ffffff;
       text-decoration:none;
       text-transform:uppercase;
       font-size:13px;
+      font-weight:600;
+      letter-spacing:1.5px;
       display:inline-block;
-      margin-top:25px;
+      margin-top:30px;
       transition:var(--transition);
+      border:none;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 4px 20px rgba(8,145,178,.3);
+      border-radius:4px;
     }
 
-    section{padding:100px 0}
+    .btn::before{
+      content:'';
+      position:absolute;
+      top:0;left:-100%;
+      width:100%;height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transition:.5s;
+    }
+
+    .btn:hover::before{left:100%}
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 6px 30px rgba(8,145,178,.5);
+    }
+
+    section{padding:120px 0}
 
     .section-title{
       text-align:center;
       font-family:'Cormorant Garamond',serif;
-      font-size:52px;
-      margin-bottom:60px;
-      color:var(--navy);
+      font-size:56px;
+      margin-bottom:70px;
+      background:linear-gradient(135deg, var(--primary), var(--text-primary));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      position:relative;
+    }
+
+    .section-title::after{
+      content:'';
+      position:absolute;
+      bottom:-15px;
+      left:50%;
+      transform:translateX(-50%);
+      width:100px;
+      height:3px;
+      background:linear-gradient(90deg, transparent, var(--primary), transparent);
     }
 
     .project-card{
-      background:white;
-      box-shadow:var(--shadow-md);
+      background:var(--bg-card);
+      box-shadow:var(--shadow-card);
       margin-bottom:60px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+      transition:var(--transition);
+    }
+
+    .project-card:hover{
+      transform:translateY(-5px);
+      box-shadow:var(--shadow-glow), var(--shadow-card);
+      border-color:var(--primary);
     }
 
     .project-image{
-      background:#f4f4f4;
-      padding:20px;
+      background:var(--bg-lighter);
+      padding:30px;
+      border-bottom:1px solid var(--border);
     }
 
     .project-image img{
       width:100%;
       max-height:420px;
       object-fit:contain;
+      border-radius:8px;
     }
 
-    .project-content{padding:40px}
+    .project-content{padding:45px}
 
     .project-content p{
-      color:var(--navy-light);
+      color:var(--text-secondary);
       margin-bottom:25px;
+      font-size:16px;
     }
 
     table{
       width:100%;
       border-collapse:collapse;
-      margin-top:25px;
+      margin-top:30px;
+      background:var(--bg-lighter);
+      border-radius:8px;
+      overflow:hidden;
     }
 
-    th,td{
-      padding:14px;
-      border-bottom:1px solid #ddd;
+    th{
+      background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color:#ffffff;
+      padding:16px;
+      text-align:left;
+      font-weight:600;
+      text-transform:uppercase;
+      font-size:13px;
+      letter-spacing:1px;
     }
+
+    td{
+      padding:16px;
+      border-bottom:1px solid var(--border);
+      color:var(--text-primary);
+    }
+
+    tr:last-child td{border-bottom:none}
+
+    tr:hover{background:rgba(8,145,178,.05)}
 
     .gallery img{
       width:100%;
-      margin-top:30px;
+      margin-top:40px;
       object-fit:contain;
+      border-radius:12px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-card);
     }
 
     .upcoming-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:30px;
+      gap:35px;
     }
 
     .upcoming-card{
-      background:white;
-      padding:40px;
-      box-shadow:var(--shadow-sm);
-      border-top:4px solid var(--gold);
+      background:var(--bg-card);
+      padding:45px;
+      box-shadow:var(--shadow-card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      border-top:4px solid var(--primary);
       transition:var(--transition);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .upcoming-card::before{
+      content:'';
+      position:absolute;
+      top:0;right:0;
+      width:80px;height:80px;
+      background:radial-gradient(circle, rgba(8,145,178,.1), transparent);
+      border-radius:50%;
+      transform:translate(40px,-40px);
+    }
+
+    .upcoming-card:hover{
+      transform:translateY(-8px);
+      border-color:var(--primary);
+      box-shadow:var(--shadow-glow), var(--shadow-card);
+    }
+
+    .upcoming-card strong{
+      color:var(--primary);
+      font-size:18px;
+      display:block;
+      margin-bottom:15px;
+    }
+
+    #mohini{
+      background:var(--bg-dark);
+    }
+
+    #sai{
+      background:var(--bg-card);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+    }
+
+    #location{
+      background:var(--bg-lighter);
+      border-bottom:1px solid var(--border);
+    }
+
+    .location-content{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:50px;
+      align-items:start;
+    }
+
+    .location-info{
+      background:var(--bg-card);
+      padding:40px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-card);
+    }
+
+    .location-info h3{
+      color:var(--primary);
+      font-size:28px;
+      margin-bottom:30px;
+      font-family:'Cormorant Garamond',serif;
+    }
+
+    .info-item{
+      display:flex;
+      align-items:start;
+      gap:15px;
+      margin-bottom:25px;
+      padding-bottom:25px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .info-item:last-child{
+      border-bottom:none;
+      margin-bottom:0;
+      padding-bottom:0;
+    }
+
+    .info-icon{
+      font-size:24px;
+      color:var(--primary);
+      flex-shrink:0;
+    }
+
+    .info-text strong{
+      display:block;
+      color:var(--text-primary);
+      margin-bottom:5px;
+      font-size:16px;
+    }
+
+    .info-text span{
+      color:var(--text-secondary);
+      font-size:15px;
+      line-height:1.6;
+    }
+
+    .map-container{
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-card);
+      height:500px;
+    }
+
+    .map-container iframe{
+      width:100%;
+      height:100%;
+      border:none;
+      filter:var(--map-filter);
+    }
+
+    [data-theme="dark"] .map-container iframe{
+      filter:invert(90%) hue-rotate(180deg) brightness(0.9);
     }
 
     #contact{
-      background:var(--navy);
-      color:white;
+      background:var(--bg-dark);
+      position:relative;
     }
 
+    #contact::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;bottom:0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(8,145,178,.08), transparent 40%),
+        radial-gradient(circle at 70% 60%, rgba(225,29,72,.06), transparent 40%);
+      pointer-events:none;
+    }
+
+    #contact .container{position:relative;z-index:1}
+
     .query-form{
-      max-width:600px;
+      max-width:650px;
       margin:auto;
-      background:rgba(255,255,255,.06);
-      padding:40px;
+      background:var(--bg-card);
+      padding:50px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-card);
     }
 
     .query-form input,
     .query-form textarea{
       width:100%;
-      padding:14px;
-      background:transparent;
-      border:1px solid rgba(255,255,255,.3);
-      color:white;
+      padding:16px 20px;
+      background:var(--bg-lighter);
+      border:1px solid var(--border);
+      color:var(--text-primary);
       margin-bottom:20px;
+      border-radius:8px;
+      font-family:'Montserrat',sans-serif;
+      font-size:15px;
+      transition:var(--transition);
+    }
+
+    .query-form input:focus,
+    .query-form textarea:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(8,145,178,.1);
+    }
+
+    .query-form input::placeholder,
+    .query-form textarea::placeholder{
+      color:var(--text-secondary);
+    }
+
+    .query-form textarea{
+      min-height:140px;
+      resize:vertical;
     }
 
     .loading,.success{
       display:none;
-      margin-top:15px;
-      color:var(--gold);
+      margin-top:20px;
+      padding:12px 20px;
+      border-radius:6px;
       font-weight:600;
+      text-align:center;
+    }
+
+    .loading{
+      background:rgba(8,145,178,.1);
+      color:var(--primary);
+      border:1px solid var(--primary);
+    }
+
+    .success{
+      background:rgba(34,197,94,.1);
+      color:#22c55e;
+      border:1px solid #22c55e;
     }
 
     footer{
-      background:#222;
-      color:#aaa;
+      background:var(--bg-dark);
+      color:var(--text-secondary);
       text-align:center;
-      padding:40px 0;
+      padding:50px 0;
+      border-top:1px solid var(--border);
+    }
+
+    @media(max-width:992px){
+      .location-content{
+        grid-template-columns:1fr;
+      }
     }
 
     @media(max-width:768px){
       .upcoming-grid{grid-template-columns:1fr}
-      .hero h1{font-size:40px}
+      .hero h1{font-size:42px}
+      .section-title{font-size:38px}
+      nav a{display:none}
+      .query-form{padding:30px 25px}
+      section{padding:80px 0}
+      .container{padding:0 20px}
     }
   </style>
 </head>
@@ -252,7 +595,11 @@
       <a href="#mohini">Mohini</a>
       <a href="#sai">Sai Chandra II</a>
       <a href="#projects">Upcoming</a>
+      <a href="#location">Location</a>
       <a href="#contact">Contact</a>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+      </div>
     </nav>
   </div>
 </header>
@@ -311,7 +658,7 @@
   </section>
 
   <!-- SAI CHANDRA II -->
-  <section id="sai" style="background:white">
+  <section id="sai">
     <div class="container">
       <h2 class="section-title">Sai Chandra II</h2>
 
@@ -319,16 +666,16 @@
         <img src="Sai_Chandra_II.jpg" alt="Sai Chandra II">
       </div>
 
-      <p style="margin-top:30px;color:var(--navy-light)">
+      <p style="margin-top:40px;color:var(--text-secondary);font-size:16px">
         Sai Chandra II is a signature residential project offering vastu-compliant
         2 and 3 BHK apartments crafted with premium construction materials and
         efficient space planning. The project is designed to provide peaceful
         living while maintaining proximity to essential city conveniences.
       </p>
 
-      <p style="color:var(--navy-light)">
+      <p style="color:var(--text-secondary);font-size:16px">
         With a strong focus on durability, ventilation, and natural light, Sai
-        Chandra II reflects Mkriti Developers’ commitment to delivering homes
+        Chandra II reflects Mkriti Developers' commitment to delivering homes
         that stand the test of time and offer genuine value to homeowners.
       </p>
     </div>
@@ -341,21 +688,21 @@
 
       <div class="upcoming-grid">
         <div class="upcoming-card">
-          <strong>Burdwan Compound – Phase II</strong><br><br>
+          <strong>Burdwan Compound – Phase II</strong>
           An expansion of our successful Burdwan Compound project, Phase II will
           feature improved layouts, enhanced amenities, and refined architectural
           design aimed at creating a modern residential community.
         </div>
 
         <div class="upcoming-card">
-          <strong>Tharpakhana Residences</strong><br><br>
+          <strong>Tharpakhana Residences</strong>
           A centrally located residential project designed for professionals and
           families seeking excellent connectivity, contemporary living spaces,
           and easy access to commercial and social hubs.
         </div>
 
         <div class="upcoming-card">
-          <strong>Morhabadi – Tagore Hill Road</strong><br><br>
+          <strong>Morhabadi – Tagore Hill Road</strong>
           Premium apartments planned near Tagore Hill Road, offering a calm and
           green environment combined with the convenience of city life — ideal
           for those seeking balanced urban living.
@@ -364,10 +711,64 @@
     </div>
   </section>
 
+  <!-- LOCATION -->
+  <section id="location">
+    <div class="container">
+      <h2 class="section-title">Visit Our Office</h2>
+
+      <div class="location-content">
+        <div class="location-info">
+          <h3>Get In Touch</h3>
+          
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text">
+              <strong>Office Address</strong>
+              <span>Mkriti Developers Pvt. Ltd.<br>Ranchi, Jharkhand, India</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-text">
+              <strong>Phone</strong>
+              <span>+91-XXXXX-XXXXX<br>Available Mon-Sat, 10AM-6PM</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-text">
+              <strong>Email</strong>
+              <span>info@mkriti.com<br>We'll respond within 24 hours</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">🕐</div>
+            <div class="info-text">
+              <strong>Business Hours</strong>
+              <span>Monday - Saturday: 10:00 AM - 6:00 PM<br>Sunday: Closed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-container">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116834.14333131556!2d85.2269525!3d23.3440997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4e104aa5db7dd%3A0xdc09d49d6899f43e!2sRanchi%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="container">
-      <h2 class="section-title" style="color:white">Send Us a Query</h2>
+      <h2 class="section-title">Send Us a Query</h2>
 
       <div class="query-form">
         <form id="query-form" onsubmit="submitQuery();return false;">
@@ -375,9 +776,9 @@
           <input id="qr-phone" placeholder="Phone Number" required>
           <textarea id="qr-query" placeholder="Your Query" required></textarea>
 
-          <button class="btn">Submit</button>
-          <div class="loading" id="loading">Submitting…</div>
-          <div class="success" id="success">✓ Submitted successfully</div>
+          <button class="btn">Submit Query</button>
+          <div class="loading" id="loading">⏳ Submitting your query…</div>
+          <div class="success" id="success">✓ Query submitted successfully!</div>
         </form>
       </div>
     </div>
@@ -386,11 +787,37 @@
 </main>
 
 <footer>
-  © <span id="year"></span> Mkriti Developers Pvt. Ltd.
+  © <span id="year"></span> Mkriti Developers Pvt. Ltd. All rights reserved.
 </footer>
 
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// Theme Toggle Functionality
+function toggleTheme() {
+  const html = document.documentElement;
+  const themeIcon = document.getElementById('theme-icon');
+  const currentTheme = html.getAttribute('data-theme');
+  
+  if (currentTheme === 'light') {
+    html.setAttribute('data-theme', 'dark');
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    themeIcon.textContent = '☀️';
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// Load saved theme on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  const themeIcon = document.getElementById('theme-icon');
+  
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+});
 </script>
 
 <script type="module">
